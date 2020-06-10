@@ -1,0 +1,50 @@
+image: node:latest
+
+stages:
+  - build
+  - deploy
+
+cache:
+  paths:
+    - frontend/node_modules/
+    - frontend/.yarn
+    
+build frontend:
+  stage: build
+  script:
+    - cd frontend
+    - yarn install --frozen-lockfile --cache-folder=.yarn
+    - yarn build
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      changes:
+        - frontend/**/*
+      when: always
+  artifacts:
+    paths:
+      - frontend/build/
+
+
+deploy frontend to Pages:
+  stage: deploy
+  script:
+    - mv frontend/build/ public
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      changes:
+        - frontend/**/*
+      when: on_success
+  artifacts:
+    paths:
+      - public
+
+deploy backend:
+  stage: deploy
+  script:
+    - echo 'TODO'
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      changes:
+        - backend/**/*
+      when: always
+
