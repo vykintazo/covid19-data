@@ -5,6 +5,7 @@ import {Card, Col, Layout, Menu, Row, Select, Typography} from 'antd';
 import LineChart from "./LineChart";
 import {DataSchema} from "./types";
 import {Link, Route, Switch} from 'react-router-dom';
+import logo from './icon_color.svg'
 
 const {Header, Footer, Content} = Layout;
 
@@ -21,7 +22,7 @@ function App() {
 
 
     useEffect(() => {
-        fetch(`http://localhost:5000/sources/${src}`)
+        fetch(`https://api.electo.lt/covid/sources/${src}`)
             .then((res: Response) => res.json())
             .then((data) => {
                 setCountries(data.countries);
@@ -29,7 +30,7 @@ function App() {
             });
     }, [src])
     useEffect(() => {
-        fetch(`http://localhost:5000/sources/${src}/data/${country.toLowerCase()}/all`)
+        fetch(`https://api.electo.lt/covid/sources/${src}/data/${country.toLowerCase()}/all`)
             .then((res: Response) => res.json())
             .then((data) => {
                 console.log(data);
@@ -49,7 +50,8 @@ function App() {
         <Layout className="layout">
             <Header>
                 <div className="logo">
-                    COVID Data
+                   <img src={logo} alt={'Logo'} width={"50px"} style={{margin: "0 16px"}}/>
+                   <span>Covid Data</span>
                 </div>
                 <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
                     <Menu.Item key="1">
@@ -129,7 +131,13 @@ function App() {
                     </Switch>
                 </div>
             </Content>
-            <Footer style={{textAlign: 'center'}}>©2020 Vykintas Valužis</Footer>
+            <Footer style={{textAlign: 'center'}}>
+                <span>© 2020 Vykintas Valužis</span>
+                <br/>
+                <span>Webapp's icon made by strip from
+                    <Typography.Link href={"https://flaticon.com"} target={"_blank"}> flaticon.com</Typography.Link>
+                </span>
+            </Footer>
         </Layout>
     );
 }

@@ -4,7 +4,6 @@ from flask_restful import Resource, Api
 import urllib.request, json
 import pandas as pd
 import numpy as np
-from iso3166 import countries
 from utils import prepare_sources
 
 app = Flask(__name__)
@@ -68,4 +67,4 @@ api.add_resource(GetCSEEData, "/sources/csse/data/<string:country>/<string:t>")
 
 if __name__ == '__main__':
     prepare_sources()
-    app.run()
+    app.run(host="0.0.0.0")
