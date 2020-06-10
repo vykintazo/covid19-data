@@ -1,0 +1,22 @@
+.site-layout-content {
+    background: #fff;
+    padding: 24px;
+    min-height: 500px;
+}
+#components-layout-demo-top .logo {
+    width: 120px;
+    height: 31px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px 24px 16px 0;
+    float: left;
+}
+.layout {
+    min-height: 100%;
+}
+.logo {
+    float: left;
+    color: white;
+    margin: 0 24px 0 0;
+    text-align: center;
+    font-weight: bold;
+}
