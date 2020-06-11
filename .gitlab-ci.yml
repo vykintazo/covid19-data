@@ -8,6 +8,36 @@ cache:
   paths:
     - frontend/node_modules/
     - frontend/.yarn
+
+before_script:
+  ##
+  ## Install ssh-agent if not already installed, it is required by Docker.
+  ## (change apt-get to yum if you use an RPM-based image)
+  ##
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - 'which rsync || ( apt-get update -y && apt-get install rsync -y )'
+
+
+  ##
+  ## Run ssh-agent (inside the build environment)
+  ##
+  - eval $(ssh-agent -s)
+
+  ##
+  ## Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  ## We're using tr to fix line endings which makes ed25519 keys work
+  ## without extra base64 encoding.
+  ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
+  ##
+  - echo "$SSH_FRONTEND_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+
+  ##
+  ## Create the SSH directory and give it the right permissions
+  ##
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  ## Test connection
+  - ssh -o StrictHostKeyChecking=no -p 65002 u495639344@46.17.175.43 'ls'
     
 build frontend:
   stage: build
@@ -25,18 +55,15 @@ build frontend:
       - frontend/build/
 
 
-deploy frontend to Pages:
+deploy frontend:
   stage: deploy
   script:
-    - mv frontend/build/ public
+    - rsync -avP --delete -e 'ssh -p 65002' ./build/ u495639344@46.17.175.43:~/public_html/covid/
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       changes:
         - frontend/**/*
       when: on_success
-  artifacts:
-    paths:
-      - public
 
 deploy backend:
   stage: deploy
