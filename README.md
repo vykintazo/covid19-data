@@ -1,4 +1,6 @@
 # Covid-19 Data Webapp
+[![pipeline status](https://gitlab.com/vykintazo/covid19-data/badges/master/pipeline.svg)](https://gitlab.com/vykintazo/covid19-data/-/commits/master)
+
 Webapp which can display and forecast COVID-19 pandemic data
 
 ## About
