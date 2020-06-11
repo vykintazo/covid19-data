@@ -78,7 +78,7 @@ function App() {
                                 <Row>
                                     <Col span={24} style={{margin: 8}}>
                                         <Typography.Title>
-                                            Explore COVID-19 stats
+                                            Explore COVID-19 stats.
                                         </Typography.Title>
                                     </Col>
                                 </Row>
