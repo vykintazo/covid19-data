@@ -1,7 +1,9 @@
 import urllib.request, json
 import pandas as pd
 
+
 def prepare_sources():
+    # Prempare Lithuanian data
     with urllib.request.urlopen(
             "https://maps.registrucentras.lt/arcgis/rest/services/covid/pjuviai/FeatureServer/7/query?where=1%3D1"
             "&outFields=*&returnGeometry=false&orderByFields=DIENOS&featureEncoding=esriDefault&f=pjson") as url:
@@ -14,10 +16,9 @@ def prepare_sources():
         df_sam.index = df_sam.Date
         df_sam.index.name = 'dateIndex'
         df_sam_daily = df_sam.asfreq(freq="D", method="pad")
-
+        # Prepare global data
         df_confirmed = pd.read_csv(
             "https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
-        # Seems to be unreliable?
         df_recovered = pd.read_csv(
             "https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv")
         df_fatalities = pd.read_csv(
@@ -37,4 +38,9 @@ def prepare_sources():
         df_t = pd.merge(df_confirmed, df_fatalities, how="outer", on=["Province/State", "Country/Region", "Date"])
         df_csse = pd.merge(df_t, df_recovered, how="outer", on=["Province/State", "Country/Region", "Date"])
         df_csse["Date"] = pd.to_datetime(df_csse["Date"])
-        return df_csse, df_sam_daily
+
+        # Merge Provinces
+        df_grouped = df_csse.groupby(["Date", "Country/Region"], as_index=False).sum()
+        df_grouped["Infected"] = df_grouped["Confirmed"] - (df_grouped["Recovered"] + df_grouped["Died"])
+        df_grouped.columns = ["Date", "Country", "Confirmed", "Died", "Recovered", "Infected"]
+        return df_grouped, df_sam_daily

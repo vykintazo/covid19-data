@@ -1,9 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Resource, Api
-import urllib.request, json
-import pandas as pd
-import numpy as np
+import json
 from utils import prepare_sources
 
 app = Flask(__name__)
@@ -48,12 +46,9 @@ class GetSamData(Resource):
 class GetCSEEData(Resource):
     def get(self, country, t):
         try:
-            df = df_csse.loc[df_csse["Country/Region"] == country.capitalize()]\
-                .groupby(["Date", "Country/Region"], as_index=False)\
-                .sum()
             if t == "all":
-                return json.loads(df[['Date', 'Confirmed', 'Recovered', 'Died']].to_json(orient='table', index=False))
-            return json.loads(df[['Date', t.capitalize()]].to_json(orient='table', index=False))
+                return json.loads(df_csse.loc[df_csse.Country == country.capitalize()][['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']].to_json(orient='table', index=False))
+            return json.loads(df_csse[['Date', t.capitalize()]].to_json(orient='table', index=False))
         except:
             return "", 400
 
