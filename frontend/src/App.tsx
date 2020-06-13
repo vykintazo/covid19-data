@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react';
 import "antd/dist/antd.css";
 import "./App.css"
 import {Card, Col, Layout, Menu, Row, Select, Typography} from 'antd';
-import LineChart from "./LineChart";
+// import LineChart from "./LineChart";
 import {DataSchema} from "./types";
 import {Link, Route, Switch} from 'react-router-dom';
 import logo from './icon_color.svg'
+import RechartsChart from './RechartsChart';
 
 const {Header, Footer, Content} = Layout;
 
@@ -114,7 +115,9 @@ function App() {
                                     </Row>
                                 </Card>
                                 <Card style={{margin: "32px"}}>
-                                    <LineChart data={data}/>
+                                    {data?.data &&
+                                        <RechartsChart data={data}/>
+                                    }
                                 </Card>
                             </div>
                         </Route>

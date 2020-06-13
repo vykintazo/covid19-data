@@ -32,9 +32,9 @@ def get_sir(df_country, country):
     y = df_country.Infected.to_numpy()
     global population, i0
     r = requests.get("https://restcountries.eu/rest/v2/name/{}?fields=population".format(country.lower()))
-    print(r)
-    population = float(r[0].population)
+    print(r.json()[0])
+    population = float(r.json()[0]['population'])
     i0 = y[0]
     popt, pcov = curve_fit(fit_sir, x, y, bounds=(0, 10))
     fitted = fit_sir(x, *popt)
-    return popt, pcov, fitted
+    return popt, pcov, fitted, population
