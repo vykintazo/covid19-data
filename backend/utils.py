@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def prepare_sources():
-    # Prempare Lithuanian data
+    # Prepare Lithuanian data
     with urllib.request.urlopen(
             "https://maps.registrucentras.lt/arcgis/rest/services/covid/pjuviai/FeatureServer/7/query?where=1%3D1"
             "&outFields=*&returnGeometry=false&orderByFields=DIENOS&featureEncoding=esriDefault&f=pjson") as url:

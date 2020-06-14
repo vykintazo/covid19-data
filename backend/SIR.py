@@ -27,6 +27,13 @@ def fit_sir(x, beta, gamma):
     return SIR(population, beta, gamma, x, s0, i0, r0)[1]
 
 
+def fit_sir_full(x, beta, gamma):
+    r0 = float(0)
+    s0 = population - i0
+    # return all
+    return SIR(population, beta, gamma, x, s0, i0, r0)
+
+
 def get_sir(df_country, country):
     x = [i for i in range(len(df_country))]
     y = df_country.Infected.to_numpy()
@@ -36,5 +43,5 @@ def get_sir(df_country, country):
     population = float(r.json()[0]['population'])
     i0 = y[0]
     popt, pcov = curve_fit(fit_sir, x, y, bounds=(0, 10))
-    fitted = fit_sir(x, *popt)
+    fitted = fit_sir_full(x, *popt)
     return popt, pcov, fitted, population

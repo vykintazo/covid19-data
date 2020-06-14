@@ -20,7 +20,7 @@ const RechartsChart = ({data}: Props) => (
             <YAxis axisLine={false} tickLine={false}/>
             <Tooltip labelFormatter={(value) => dayjs(value).format("MMM D")}/>
             <Legend iconType={"plainline"}/>
-            {data && data.schema.fields.slice(1).map((el, i) =>
+            {data?.schema.fields.slice(1).map((el, i) =>
                 <Line
                     key={`line-${i}`}
                     type="monotone"
