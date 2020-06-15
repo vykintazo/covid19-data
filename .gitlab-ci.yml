@@ -1,7 +1,5 @@
 image: node:latest
 
-include:
-  - template: Dependency-Scanning.gitlab-ci.yml
 
 stages:
   - build
@@ -39,6 +37,8 @@ before_script:
     
 build frontend:
   stage: build
+  include:
+  - template: Dependency-Scanning.gitlab-ci.yml
   cache:
     paths:
       - frontend/node_modules/
