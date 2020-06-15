@@ -14,6 +14,8 @@ export default function Explore() {
     const [countries, setCountries] = useState<string[]>(["Lithuania"]);
     const [src, setSrc] = useState("sam")
     const [country, setCountry] = useState("Lithuania");
+    const [diff, setDiff] = useState(false);
+
 
 
     useEffect(() => {
@@ -25,13 +27,13 @@ export default function Explore() {
             });
     }, [src])
     useEffect(() => {
-        fetch(`https://api.electo.lt/covid/sources/${src}/data/${country.toLowerCase()}/all`)
+        fetch(`https://api.electo.lt/covid/sources/${src}/data/${country.toLowerCase()}/all${diff ? "diff" : ""}`)
             .then((res: Response) => res.json())
             .then((data) => {
                 console.log(data);
                 setData(data);
             });
-    }, [src, country])
+    }, [src, country, diff])
 
     const handleSrcChange = (val: string) => {
         console.log(val)
@@ -40,6 +42,9 @@ export default function Explore() {
     const handleCountryChange = (val: string) => {
         console.log(val)
         setCountry(val)
+    }
+    const onChange = (e: any) => {
+        setDiff(e.target.checked)
     }
 
     return (
@@ -51,11 +56,11 @@ export default function Explore() {
                     </Typography.Title>
                 </Col>
             </Row>
-            <DataSelector handleSrcChange={handleSrcChange} handleCountryChange={handleCountryChange} srcs={srcs}
+            <DataSelector diff={diff} onChange={onChange} handleSrcChange={handleSrcChange} handleCountryChange={handleCountryChange} srcs={srcs}
                           countries={countries}/>
             <Card style={{margin: "32px"}}>
                 {data &&
-                <RechartsChart data={data}/>
+                <RechartsChart data={data} diff={diff}/>
                 }
             </Card>
         </div>

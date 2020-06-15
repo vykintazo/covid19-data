@@ -24,8 +24,6 @@ parser.add_argument('r0', type=int)
 parser.add_argument('days', type=int)
 
 
-
-
 class HelloWorld(Resource):
     def get(self):
         return {'hello': 'world'}
@@ -51,10 +49,16 @@ class GetSource(Resource):
 class GetSamData(Resource):
     def get(self, t):
         try:
+            df = df_sam
             if t == "all":
                 return json.loads(
-                    df_sam[["Date", "Confirmed", "Recovered", "Died", "Infected"]].to_json(orient='table', index=False))
-            return json.loads(df_sam[t.title()].to_json(orient='table'))
+                    df[["Date", "Confirmed", "Recovered", "Died", "Infected"]].to_json(orient='table', index=False))
+            if t == "alldiff":
+                df[["Confirmed", "Recovered", "Died", "Infected"]] = df[
+                    ["Confirmed", "Recovered", "Died", "Infected"]].diff().fillna(0)
+                return json.loads(
+                    df[["Date", "Confirmed", "Recovered", "Died", "Infected"]].to_json(orient='table', index=False))
+            return json.loads(df[t.title()].to_json(orient='table'))
         except Exception as e:
             print(e)
             return "", 400
@@ -63,10 +67,18 @@ class GetSamData(Resource):
 class GetCSEEData(Resource):
     def get(self, country, t):
         try:
+            df = df_csse
             if t == "all":
                 return json.loads(df_csse.loc[df_csse.Country == country.title()][
                                       ['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']].to_json(orient='table',
                                                                                                       index=False))
+            elif t == "alldiff":
+                df[["Confirmed", "Recovered", "Died", "Infected"]] = df[
+                    ["Confirmed", "Recovered", "Died", "Infected"]].diff().fillna(0)
+                return json.loads(df_csse.loc[df_csse.Country == country.title()][
+                                      ['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']].to_json(
+                    orient='table',
+                    index=False))
             return json.loads(df_csse[['Date', t.title()]].to_json(orient='table', index=False))
         except:
             return "", 400
@@ -78,7 +90,8 @@ class GetSIRPredictions(Resource):
             if src == "sam":
                 df = df_sam[['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']]
             elif src == "csse":
-                df = df_csse.loc[df_csse.Country == country.title()][['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']]
+                df = df_csse.loc[df_csse.Country == country.title()][
+                    ['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']]
             else:
                 return "", 400
             popt, pcov, fitted, popul, idx = get_sir(df, country)
@@ -109,7 +122,8 @@ class GetARIMAPredictions(Resource):
             if src == "sam":
                 df = df_sam[['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']]
             elif src == "csse":
-                df = df_csse.loc[df_csse.Country == country.title()][['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']]
+                df = df_csse.loc[df_csse.Country == country.title()][
+                    ['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']]
             else:
                 return "", 400
 
@@ -133,7 +147,8 @@ class GetSIR(Resource):
         try:
             args = parser.parse_args()
             print(args)
-            preds = SIR(args['population'], args['beta'], args['gamma'], np.arange(0, args['days']), args['s0'], args['i0'], args['r0'])
+            preds = SIR(args['population'], args['beta'], args['gamma'], np.arange(0, args['days']), args['s0'],
+                        args['i0'], args['r0'])
             df = DataFrame(preds.T, columns=["Susceptible", "Infected", "Removed"])
             df["Day"] = [i for i in range(len(preds[0]))]
             return json.loads(df[["Day", "Susceptible", "Infected", "Removed"]].to_json(orient='table', index=False))
@@ -150,7 +165,6 @@ api.add_resource(GetCSEEData, "/sources/csse/data/<string:country>/<string:t>")
 api.add_resource(GetSIRPredictions, "/sources/<string:src>/sir/<string:country>")
 api.add_resource(GetARIMAPredictions, "/sources/<string:src>/arima/<string:country>/<int:periods>")
 api.add_resource(GetSIR, "/sir")
-
 
 if __name__ == '__main__':
     prepare_sources()

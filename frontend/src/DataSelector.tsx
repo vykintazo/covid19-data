@@ -1,5 +1,6 @@
 import React from "react";
-import {Card, Col, Input, Row, Select} from "antd";
+import {Card, Checkbox, Col, Input, Row, Select} from "antd";
+import {CheckboxChangeEvent} from "antd/lib/checkbox";
 
 
 type Props = {
@@ -8,9 +9,12 @@ type Props = {
     srcs: { val: string, name: string }[]
     countries: string[]
     population?: string
+    onChange?: (e: CheckboxChangeEvent) => void
+    diff?: boolean
 }
 
-export default function DataSelector({handleSrcChange, handleCountryChange, srcs, countries, population}: Props) {
+export default function DataSelector({handleSrcChange, handleCountryChange, onChange, srcs, countries, population, diff}: Props) {
+
 
     return (
         <Card style={{margin: "0 32px"}}>
@@ -43,10 +47,17 @@ export default function DataSelector({handleSrcChange, handleCountryChange, srcs
                                                                     value={value.toLowerCase()}>{value}</Select.Option>)}
                     </Select>
                 </Col>
-                {population &&
-                <Col xs={24} lg={8} style={{margin: 0}}>
-                    <Input style={{width: "100%"}} placeholder="Population" value={population}/>
-                </Col>
+                {population ?
+                    <Col xs={24} lg={8} style={{margin: 0}}>
+                        <Input style={{width: "100%"}} placeholder="Population" value={population}/>
+                    </Col>
+                    :
+                    diff !== undefined ?
+                        <Col xs={24} lg={8} style={{margin: 0}}>
+                            <Checkbox onChange={onChange} value={diff}>Daily</Checkbox>
+                        </Col> :
+                        null
+
                 }
 
             </Row>

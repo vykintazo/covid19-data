@@ -1,17 +1,18 @@
 import React from "react";
 import {DataSchema} from "./types";
-import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import dayjs from "dayjs";
 import {AntVQalitative10} from "./palettes";
 
 type Props = {
     data?: DataSchema
     playground?: boolean
+    diff?: boolean
 }
-const RechartsChart = ({data, playground = false}: Props) => (
+const RechartsChart = ({data, playground = false, diff = false}: Props) => (
     <ResponsiveContainer width={"100%"} aspect={2.5}>
-        <LineChart data={data?.data}
-                   margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+        <ComposedChart data={data?.data}
+                       margin={{top: 5, right: 30, left: 20, bottom: 5}}>
             <CartesianGrid vertical={false}/>
             {playground ?
                 <XAxis dataKey="Day"
@@ -43,6 +44,7 @@ const RechartsChart = ({data, playground = false}: Props) => (
                     strokeWidth={2}
                 />
             )}
+
             {data && data.schema.fields.length > 4 &&
             <Line
                 key={`line-sir`}
@@ -54,7 +56,7 @@ const RechartsChart = ({data, playground = false}: Props) => (
                 strokeDasharray={"5 5"}
             />
             }
-        </LineChart>
+        </ComposedChart>
     </ResponsiveContainer>
 )
 
