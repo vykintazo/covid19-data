@@ -1,5 +1,5 @@
 import React from "react";
-import {Card, Col, Row, Select, Input} from "antd";
+import {Card, Col, Input, Row, Select} from "antd";
 
 
 type Props = {
@@ -7,10 +7,10 @@ type Props = {
     handleCountryChange: (val: string) => void,
     srcs: { val: string, name: string }[]
     countries: string[]
-    showPopulation?: boolean
+    population?: string
 }
 
-export default function DataSelector({handleSrcChange, handleCountryChange, srcs, countries, showPopulation = false}: Props) {
+export default function DataSelector({handleSrcChange, handleCountryChange, srcs, countries, population}: Props) {
 
     return (
         <Card style={{margin: "0 32px"}}>
@@ -43,9 +43,12 @@ export default function DataSelector({handleSrcChange, handleCountryChange, srcs
                                                                     value={value.toLowerCase()}>{value}</Select.Option>)}
                     </Select>
                 </Col>
+                {population &&
                 <Col xs={24} lg={8} style={{margin: 0}}>
-                    <Input style={{width: "100%"}} placeholder="Population" />
+                    <Input style={{width: "100%"}} placeholder="Population" value={population}/>
                 </Col>
+                }
+
             </Row>
         </Card>
     )

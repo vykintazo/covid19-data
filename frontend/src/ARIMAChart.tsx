@@ -6,32 +6,20 @@ import {AntVQalitative10} from "./palettes";
 
 type Props = {
     data?: DataSchema
-    playground?: boolean
 }
-const RechartsChart = ({data, playground = false}: Props) => (
+const ARIMAChart = ({data}: Props) => (
     <ResponsiveContainer width={"100%"} aspect={2.5}>
         <LineChart data={data?.data}
                    margin={{top: 5, right: 30, left: 20, bottom: 5}}>
             <CartesianGrid vertical={false}/>
-            {playground ?
-                <XAxis dataKey="Day"
-                       interval={5}
-                       allowDuplicatedCategory={false}
-                />
-                :
-                <XAxis dataKey="Date"
-                       interval={10}
-                       allowDuplicatedCategory={false}
-                       tickFormatter={(d) => dayjs(d).format('MMM D')}
-                />
-            }
+            <XAxis dataKey="Date"
+                   interval={10}
+                   allowDuplicatedCategory={false}
+                   tickFormatter={(d) => dayjs(d).format('MMM D')}
+            />
             <YAxis axisLine={false} tickLine={false}/>
-            {!playground ?
-                <Tooltip labelFormatter={(value) => dayjs(value).format("MMM D")}
-                         formatter={(value: number, name: string) => (name === "sirInfected" ? [value.toFixed(0), "Infected prediction"] : [value, name])}/>
-                :
-                <Tooltip labelFormatter={(value) => `Day ${value}`}/>
-            }
+            <Tooltip labelFormatter={(value) => dayjs(value).format("MMM D")}
+                     formatter={(value: number, name: string) => (name.split("pred").length > 1 ? [value.toFixed(0), `${name.split("pred")[1]} prediction`] : [value, name])}/>
             <Legend iconType={"plainline"}/>
             {data?.schema.fields.slice(1, 5).map((el, i) =>
                 <Line
@@ -58,4 +46,4 @@ const RechartsChart = ({data, playground = false}: Props) => (
     </ResponsiveContainer>
 )
 
-export default RechartsChart;
+export default ARIMAChart;

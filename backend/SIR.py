@@ -1,5 +1,6 @@
 from scipy.integrate import solve_ivp
 from scipy.optimize import curve_fit
+from numpy import nonzero
 import requests
 
 
@@ -35,13 +36,16 @@ def fit_sir_full(x, beta, gamma):
 
 
 def get_sir(df_country, country):
-    x = [i for i in range(len(df_country))]
-    y = df_country.Infected.to_numpy()
     global population, i0
+    y = df_country.Infected.to_numpy()
+    first_case_idx = nonzero(y)[0][0]
+    i0 = y[first_case_idx]
+    y = y[first_case_idx:]
+    x = [i for i in range(len(y))]
+
     r = requests.get("https://restcountries.eu/rest/v2/name/{}?fields=population".format(country.lower()))
     print(r.json()[0])
     population = float(r.json()[0]['population'])
-    i0 = y[0]
-    popt, pcov = curve_fit(fit_sir, x, y, bounds=(0, 10))
+    popt, pcov = curve_fit(fit_sir, x, y, bounds=(0, 30))
     fitted = fit_sir_full(x, *popt)
-    return popt, pcov, fitted, population
+    return popt, pcov, fitted, population, first_case_idx

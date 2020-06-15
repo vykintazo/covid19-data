@@ -7,6 +7,7 @@ import {Link, Route, Switch} from 'react-router-dom';
 import logo from './icon_color.svg'
 import Explore from "./Explore";
 import SIR from "./SIR";
+import ARIMA from "./ARIMA";
 
 const {Header, Footer, Content} = Layout;
 
@@ -50,7 +51,7 @@ function App() {
                         </Route>
                         <Route path={"/arima"}>
                             <div>
-                                <h1>TODO ARIMA</h1>
+                                <ARIMA/>
                             </div>
                         </Route>
                     </Switch>
