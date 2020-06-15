@@ -49,11 +49,11 @@ class GetSource(Resource):
 class GetSamData(Resource):
     def get(self, t):
         try:
-            df = df_sam
+            df = df_sam.copy()
             if t == "all":
                 return json.loads(
                     df[["Date", "Confirmed", "Recovered", "Died", "Infected"]].to_json(orient='table', index=False))
-            if t == "alldiff":
+            elif t == "alldiff":
                 df[["Confirmed", "Recovered", "Died", "Infected"]] = df[
                     ["Confirmed", "Recovered", "Died", "Infected"]].diff().fillna(0)
                 return json.loads(
@@ -67,16 +67,15 @@ class GetSamData(Resource):
 class GetCSEEData(Resource):
     def get(self, country, t):
         try:
-            df = df_csse
+            df = df_csse.loc[df_csse.Country == country.title()][
+                ['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']]
             if t == "all":
-                return json.loads(df_csse.loc[df_csse.Country == country.title()][
-                                      ['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']].to_json(orient='table',
-                                                                                                      index=False))
+                return json.loads(df.to_json(orient='table',
+                                             index=False))
             elif t == "alldiff":
                 df[["Confirmed", "Recovered", "Died", "Infected"]] = df[
                     ["Confirmed", "Recovered", "Died", "Infected"]].diff().fillna(0)
-                return json.loads(df_csse.loc[df_csse.Country == country.title()][
-                                      ['Date', 'Confirmed', 'Recovered', 'Died', 'Infected']].to_json(
+                return json.loads(df.to_json(
                     orient='table',
                     index=False))
             return json.loads(df_csse[['Date', t.title()]].to_json(orient='table', index=False))

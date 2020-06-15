@@ -97,7 +97,12 @@ export default function SIR() {
                 </Col>
                 <Col span={4}>
                     <Card style={{maxWidth: "250px"}}>
-                        <Statistic title="Gamma StandardError" value={sirData?.additional?.data.err[1]} precision={2}/>
+                        <Statistic title="Gamma Standard Error" value={sirData?.additional?.data.err[1]} precision={2}/>
+                    </Card>
+                </Col>
+                <Col span={4} >
+                    <Card style={{maxWidth: "250px"}}>
+                        <Statistic title="Reproduction number" value={sirData?.additional?.data.popt[0] / sirData?.additional?.data.popt[1]} precision={2} prefix={"R = "}/>
                     </Card>
                 </Col>
             </Row>
