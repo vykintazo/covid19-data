@@ -58,19 +58,23 @@ deploy frontend:
   stage: deploy
   script:
     - rsync -avP --delete -e 'ssh -p 65002' frontend/build/ u495639344@46.17.175.43:~/public_html/covid/
+  environment:
+    name: fronend_prod
+    url: https://covid.artificia.lt
+
   rules:
     - if: '$CI_COMMIT_REF_NAME == "master"'
       changes:
         - frontend/**/*
       when: on_success
 
-deploy backend:
-  stage: deploy
-  script:
-    - echo 'TODO'
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
-      changes:
-        - backend/**/*
-      when: always
+# deploy backend:
+#   stage: deploy
+#   script:
+#     - echo 'TODO'
+#   rules:
+#     - if: '$CI_COMMIT_REF_NAME == "master"'
+#       changes:
+#         - backend/**/*
+#       when: always
 
