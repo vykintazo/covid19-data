@@ -8,6 +8,7 @@ import logo from './icon_color.svg'
 import Explore from "./Explore";
 import SIR from "./SIR";
 import ARIMA from "./ARIMA";
+import {GitlabOutlined} from "@ant-design/icons/lib";
 
 const {Header, Footer, Content} = Layout;
 
@@ -36,6 +37,10 @@ function App() {
                             <Link to={"/arima"}/>
                         </Menu.Item>
                     </Menu.SubMenu>
+                    <Menu.Item key="5" style={{float: "right"}} icon={<GitlabOutlined/>}>
+                        <span>Source</span>
+                        <Typography.Link href={"https://gitlab.com/vykintazo/covid19-data"} target={"_blank"}/>
+                    </Menu.Item>
                 </Menu>
             </Header>
             <Content style={{padding: '0 50px'}}>
