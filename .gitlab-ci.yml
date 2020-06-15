@@ -5,6 +5,9 @@ stages:
   - build
   - deploy
 
+include:
+  - template: Dependency-Scanning.gitlab-ci.yml
+
 before_script:
   ##
   ## Install ssh-agent if not already installed, it is required by Docker.
@@ -37,8 +40,6 @@ before_script:
     
 build frontend:
   stage: build
-  include:
-  - template: Dependency-Scanning.gitlab-ci.yml
   cache:
     paths:
       - frontend/node_modules/
