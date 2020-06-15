@@ -9,7 +9,30 @@ stages:
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
 
-before_script:
+    
+build frontend:
+  stage: build
+  cache:
+    paths:
+      - frontend/node_modules/
+      - frontend/.yarn
+  script:
+    - cd frontend
+    - yarn install --frozen-lockfile --cache-folder=.yarn
+    - yarn build
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
+      changes:
+        - frontend/**/*
+      when: always
+  artifacts:
+    paths:
+      - frontend/build/
+
+
+deploy frontend:
+  stage: deploy
+  before_script:
   ##
   ## Install ssh-agent if not already installed, it is required by Docker.
   ## (change apt-get to yum if you use an RPM-based image)
@@ -38,29 +61,6 @@ before_script:
   - chmod 700 ~/.ssh
   ## Test connection
   - ssh -o StrictHostKeyChecking=no -p 65002 u495639344@46.17.175.43 'ls'
-    
-build frontend:
-  stage: build
-  cache:
-    paths:
-      - frontend/node_modules/
-      - frontend/.yarn
-  script:
-    - cd frontend
-    - yarn install --frozen-lockfile --cache-folder=.yarn
-    - yarn build
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
-      changes:
-        - frontend/**/*
-      when: always
-  artifacts:
-    paths:
-      - frontend/build/
-
-
-deploy frontend:
-  stage: deploy
   script:
     - rsync -avP --delete -e 'ssh -p 65002' frontend/build/ u495639344@46.17.175.43:~/public_html/covid/
   environment:
