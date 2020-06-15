@@ -91,9 +91,9 @@ class GetSIRPredictions(Resource):
             resp = json.loads(df.to_json(orient='table', index=False))
             resp["additional"] = {"fields": [
                 {"name": "popt", "type": "number[]"},
-                {"name": "pocov", "type": "number[][]"},
+                {"name": "err", "type": "number[][]"},
                 {"name": "population", "type": "number"}],
-                "data": {"popt": popt.tolist(), "pcov": pcov.tolist(), "population": popul}
+                "data": {"popt": popt.tolist(), "err": np.sqrt(np.diag(pcov)).tolist(), "population": popul}
             }
 
             return resp

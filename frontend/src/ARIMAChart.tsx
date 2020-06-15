@@ -1,6 +1,6 @@
 import React from "react";
 import {DataSchema} from "./types";
-import {Area, CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {CartesianGrid, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import dayjs from "dayjs";
 import {AntVQalitative10} from "./palettes";
 
