@@ -46,6 +46,6 @@ def get_sir(df_country, country):
     r = requests.get("https://restcountries.eu/rest/v2/name/{}?fields=population".format(country.lower()))
     print(r.json()[0])
     population = float(r.json()[0]['population'])
-    popt, pcov = curve_fit(fit_sir, x, y, bounds=(0, 30))
+    popt, pcov = curve_fit(fit_sir, x, y, bounds=(0, 20))
     fitted = fit_sir_full(x, *popt)
     return popt, pcov, fitted, population, first_case_idx
