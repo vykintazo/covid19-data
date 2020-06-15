@@ -27,7 +27,7 @@ const preprocessData = (data?: DataSchema) => {
 }
 const ARIMAChart = ({data}: Props) => (
     <ResponsiveContainer width={"100%"} aspect={2.5}>
-        <ComposedChart data={preprocessData(data)}
+        <ComposedChart data={data?.data}
                        margin={{top: 5, right: 30, left: 20, bottom: 5}}>
             <CartesianGrid vertical={false}/>
             <XAxis dataKey="Date"
