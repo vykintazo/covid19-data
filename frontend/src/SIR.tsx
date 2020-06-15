@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import DataSelector from "./DataSelector";
-import {Card, Col, Row, Typography} from "antd";
+import {Card, Col, Row, Statistic, Typography} from "antd";
 import RechartsChart from "./RechartsChart";
 import {DataSchema} from "./types";
 import SIRSelector from "./SIRSelector";
@@ -79,29 +79,51 @@ export default function SIR() {
             </Row>
             <DataSelector handleSrcChange={handleSrcChange} handleCountryChange={handleCountryChange} srcs={srcs}
                           countries={countries} population={sirData?.additional?.data.population}/>
-            <Card style={{margin: "32px"}}>
-                <RechartsChart data={sirData}/>
-            </Card>
-            <Row>
-                <Col span={24} style={{margin: 8}}>
-                    <Typography.Title>
-                        SIR Playground.
-                    </Typography.Title>
+            <Row style={{margin: "32px 32px 0 32px"}} justify="center" gutter={[16,16]}>
+                <Col span={4} >
+                    <Card style={{maxWidth: "250px"}}>
+                        <Statistic title="Beta parameter" value={sirData?.additional?.data.popt[0]} precision={2} prefix={"β = "}/>
+                    </Card>
                 </Col>
-                <Row>
-                    <Col span={24} style={{margin: 2}}>
-                        <p>You can set all individual parameters to get SIR graph.</p>
-                        <p>s0, i0, r0 are the initial values for Susceptible, Infected and Removed.</p>
-                    </Col>
-                </Row>
+                <Col span={4}>
+                    <Card style={{maxWidth: "250px"}}>
+                        <Statistic title="Beta Standard Error" value={sirData?.additional?.data.err[0]} precision={2}/>
+                    </Card>
+                </Col>
+                <Col span={4}>
+                    <Card style={{maxWidth: "250px"}}>
+                        <Statistic title="Beta parameter" value={sirData?.additional?.data.popt[1]} precision={2} prefix={"γ = "}/>
+                    </Card>
+                </Col>
+                <Col span={4}>
+                    <Card style={{maxWidth: "250px"}}>
+                        <Statistic title="Gamma StandardError" value={sirData?.additional?.data.err[1]} precision={2}/>
+                    </Card>
+                </Col>
             </Row>
-            <SIRSelector onFinish={onFinish}/>
-            <Card style={{margin: "32px"}}>
-                {playData &&
-                <RechartsChart data={playData} playground/>
-                }
-            </Card>
+                <Card style={{margin: "32px"}}>
+                    <RechartsChart data={sirData}/>
+                </Card>
+                <Row>
+                    <Col span={24} style={{margin: 8}}>
+                        <Typography.Title>
+                            SIR Playground.
+                        </Typography.Title>
+                    </Col>
+                    <Row>
+                        <Col span={24} style={{margin: 2}}>
+                            <p>You can set all individual parameters to get SIR graph.</p>
+                            <p>s0, i0, r0 are the initial values for Susceptible, Infected and Removed.</p>
+                        </Col>
+                    </Row>
+                </Row>
+                <SIRSelector onFinish={onFinish}/>
+                <Card style={{margin: "32px"}}>
+                    {playData &&
+                    <RechartsChart data={playData} playground/>
+                    }
+                </Card>
         </div>
-    )
+)
 
 }

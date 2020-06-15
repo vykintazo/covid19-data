@@ -2,7 +2,6 @@ import React from 'react';
 import "antd/dist/antd.css";
 import "./App.css"
 import {Layout, Menu, Typography} from 'antd';
-// import LineChart from "./LineChart";
 import {Link, Route, Switch} from 'react-router-dom';
 import logo from './icon_color.svg'
 import Explore from "./Explore";
