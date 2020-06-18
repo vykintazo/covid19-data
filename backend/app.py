@@ -131,7 +131,7 @@ class GetARIMAPredictions(Resource):
             resp["additional"] = {"fields": [
                 {"name": "confidence_int", "type": "number[]"},
                 {"name": "summary", "type": "string"}],
-                "data": {"confidence_int": confint.tolist(), "summary": summ.as_text()}
+                "data": {"confidence_int": confint, "summary": summ.as_text()}
             }
 
             return resp

@@ -8,6 +8,7 @@ type Props = {
     data?: DataSchema
 }
 
+/*
 const preprocessData = (data?: DataSchema) => {
     let i = 0;
     if(data){
@@ -25,6 +26,7 @@ const preprocessData = (data?: DataSchema) => {
     return undefined;
 
 }
+*/
 const ARIMAChart = ({data}: Props) => (
     <ResponsiveContainer width={"100%"} aspect={2.5}>
         <ComposedChart data={data?.data}
