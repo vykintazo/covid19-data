@@ -32,7 +32,7 @@ export default function SIR() {
 
 
     useEffect(() => {
-        fetch(`https://api.electo.lt/covid/sources/${src}`)
+        fetch(`${process.env.REACT_APP_API_URL}sources/${src}`)
             .then((res: Response) => res.json())
             .then((data) => {
                 setCountries(data.countries);
@@ -41,7 +41,7 @@ export default function SIR() {
     }, [src])
     useEffect(() => {
         const fetchStuff = async () => {
-            let res2 = await fetch(`https://api.electo.lt/covid/sources/${src}/sir/${country.toLowerCase()}`);
+            let res2 = await fetch(`${process.env.REACT_APP_API_URL}sources/${src}/sir/${country.toLowerCase()}`);
             let sir_data = await res2.json();
             console.log("SIR", sir_data);
             setSirData(sir_data);
@@ -60,7 +60,7 @@ export default function SIR() {
     }
     const onFinish = (values: any) => {
         console.log('Success:', values);
-        postData("https://api.electo.lt/covid/sir", values).then(data => {
+        postData("${process.env.REACT_APP_API_URL}sir", values).then(data => {
             console.log("data", data)
             setPlayData(data)
         })
@@ -92,7 +92,7 @@ export default function SIR() {
                 </Col>
                 <Col span={4}>
                     <Card style={{maxWidth: "250px"}}>
-                        <Statistic title="Beta parameter" value={sirData?.additional?.data.popt[1]} precision={2} prefix={"γ = "}/>
+                        <Statistic title="Gamma parameter" value={sirData?.additional?.data.popt[1]} precision={2} prefix={"γ = "}/>
                     </Card>
                 </Col>
                 <Col span={4}>

@@ -18,7 +18,7 @@ export default function ARIMA() {
 
 
     useEffect(() => {
-        fetch(`https://api.electo.lt/covid/sources/${src}`)
+        fetch(`${process.env.REACT_APP_API_URL}sources/${src}`)
             .then((res: Response) => res.json())
             .then((data) => {
                 setCountries(data.countries);
@@ -27,7 +27,7 @@ export default function ARIMA() {
     }, [src])
     useEffect(() => {
         const fetchStuff = async () => {
-            let res2 = await fetch(`https://api.electo.lt/covid/sources/${src}/arima/${country.toLowerCase()}/20`);
+            let res2 = await fetch(`${process.env.REACT_APP_API_URL}sources/${src}/arima/${country.toLowerCase()}/20`);
             let sir_data = await res2.json();
             console.log("ARIMA", sir_data);
             setArimaData(sir_data);

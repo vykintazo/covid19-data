@@ -19,7 +19,7 @@ export default function Explore() {
 
 
     useEffect(() => {
-        fetch(`https://api.electo.lt/covid/sources/${src}`)
+        fetch(`${process.env.REACT_APP_API_URL}sources/${src}`)
             .then((res: Response) => res.json())
             .then((data) => {
                 setCountries(data.countries);
@@ -27,7 +27,7 @@ export default function Explore() {
             });
     }, [src])
     useEffect(() => {
-        fetch(`https://api.electo.lt/covid/sources/${src}/data/${country.toLowerCase()}/all${diff ? "diff" : ""}`)
+        fetch(`${process.env.REACT_APP_API_URL}sources/${src}/data/${country.toLowerCase()}/all${diff ? "diff" : ""}`)
             .then((res: Response) => res.json())
             .then((data) => {
                 console.log(data);
