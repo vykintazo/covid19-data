@@ -1,5 +1,4 @@
-image: node:latest
-
+image: node:current-buster-slim
 
 stages:
   - test
@@ -82,7 +81,7 @@ deploy frontend:
 #       changes:
 #         - backend/**/*
 #       when: always
-staging:
+deploy backend:
   stage: deploy
   script:
     - apt-get update -qy
