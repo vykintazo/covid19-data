@@ -82,4 +82,14 @@ deploy frontend:
 #       changes:
 #         - backend/**/*
 #       when: always
+staging:
+  stage: deploy
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - cd backend
+    - gem install dpl
+    - dpl --provider=heroku --app=covid-19-data-lt --api-key=$HEROKU_API_KEY
+  only:
+    - master
 
