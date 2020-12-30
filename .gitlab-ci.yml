@@ -80,8 +80,8 @@ deploy backend:
     - cd backend
     - gem install dpl
     - dpl --provider=heroku --app=covid-19-data-lt --api-key=$HEROKU_API_KEY
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "master"'
-      changes:
-        - backend/**/*
+  # rules:
+  #   - if: '$CI_COMMIT_REF_NAME == "master"'
+  #     changes:
+  #       - backend/**/*
 
