@@ -1,4 +1,4 @@
-image: node:current-buster-slim
+image: node:current-buster
 
 stages:
   - test
@@ -76,7 +76,7 @@ deploy backend:
   stage: deploy
   script:
     - apt-get update -qy
-    - apt-get install -y ruby-dev git
+    - apt-get install -y ruby-dev
     - cd backend
     - gem install dpl
     - dpl --provider=heroku --app=covid-19-data-lt --api-key=$HEROKU_API_KEY
