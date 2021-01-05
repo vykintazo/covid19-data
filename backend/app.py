@@ -50,6 +50,7 @@ class GetSamData(Resource):
     def get(self, t):
         try:
             df = df_sam.copy()
+            print(len(df))
             if t == "all":
                 return json.loads(
                     df[["Date", "Confirmed", "Recovered", "Died", "Infected"]].to_json(orient='table', index=False))

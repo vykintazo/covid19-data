@@ -32,11 +32,12 @@ def prepare_sources():
         features = [i['attributes'] for i in data['features']]
         df_sam = pd.DataFrame(features)
         # df_sam = df_sam.drop(["OBJECTID", "DIENOS"], axis=1)
-        df_sam.columns = ["Confirmed", "Infected", "Recovered", "Died", "Date"]
+        df_sam.columns = ["Infected", "Confirmed", "Recovered", "Died", "Date"]
         df_sam.Date = pd.to_datetime(df_sam.Date, unit="ms")
         df_sam.index = df_sam.Date
         df_sam.index.name = 'dateIndex'
-        df_sam_daily = df_sam.asfreq(freq="D", method="pad")
+        df_sam_daily = df_sam.sort_index().asfreq(freq="D", method="pad")
+        print(df_sam_daily.head(2))
         # Prepare global data
         df_confirmed = pd.read_csv(
             "https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series"
