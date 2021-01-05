@@ -6,7 +6,7 @@ import DataSelector from "./DataSelector";
 
 export default function Explore() {
 
-    const srcs = [{val: "sam", name: "Lithuanian Ministry of Health"}, {
+    const srcs = [{val: "sam", name: "Lithuanian National Public Health Center"}, {
         val: "csse",
         name: "Center for Systems Science and Engineering at JHU"
     }]

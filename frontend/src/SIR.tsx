@@ -60,7 +60,7 @@ export default function SIR() {
     }
     const onFinish = (values: any) => {
         console.log('Success:', values);
-        postData("${process.env.REACT_APP_API_URL}sir", values).then(data => {
+        postData(`${process.env.REACT_APP_API_URL}sir`, values).then(data => {
             console.log("data", data)
             setPlayData(data)
         })
