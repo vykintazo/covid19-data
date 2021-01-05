@@ -4,25 +4,49 @@ import pandas as pd
 
 def prepare_sources():
     # Prepare Lithuanian data
-    with urllib.request.urlopen(
-            "https://maps.registrucentras.lt/arcgis/rest/services/covid/pjuviai/FeatureServer/7/query?where=1%3D1"
-            "&outFields=*&returnGeometry=false&orderByFields=DIENOS&featureEncoding=esriDefault&f=pjson") as url:
+    with urllib.request.urlopen("https://services3.arcgis.com/MF53hRPmwfLccHCj/arcgis/rest/services"
+                                "/COVID19_bendroji_statistika/FeatureServer/0/query?where=1%3D1&objectIds=&time"
+                                "=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel"
+                                "=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter"
+                                "&returnGeodetic=false&outFields=*&returnGeometry=false&featureEncoding=esriDefault"
+                                "&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR"
+                                "=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false"
+                                "&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false"
+                                "&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields"
+                                "=date+DESC&groupByFieldsForStatistics=date&outStatistics=%5B%0D%0A++%7B%0D%0A"
+                                "++++%22statisticType%22%3A+%22sum%22%2C%0D%0A++++%22onStatisticField%22%3A"
+                                "+%22active_cases%22%2C%0D%0A++++%22outStatisticFieldName%22%3A+%22active%22%0D%0A"
+                                "++%7D%2C%0D%0A++%7B%0D%0A++++%22statisticType%22%3A+%22sum%22%2C%0D%0A"
+                                "++++%22onStatisticField%22%3A+%22confirmed_cases_cumulative%22%2C%0D%0A"
+                                "++++%22outStatisticFieldName%22%3A+%22confirmed%22%0D%0A++%7D%2C%0D%0A%7B%0D%0A"
+                                "++++%22statisticType%22%3A+%22sum%22%2C%0D%0A++++%22onStatisticField%22%3A"
+                                "+%22recovered_cases_cumulative%22%2C%0D%0A++++%22outStatisticFieldName%22%3A"
+                                "+%22recovered%22%0D%0A++%7D%2C%0D%0A%7B%0D%0A++++%22statisticType%22%3A+%22sum%22%2C"
+                                "%0D%0A++++%22onStatisticField%22%3A+%22deaths_cumulative%22%2C%0D%0A"
+                                "++++%22outStatisticFieldName%22%3A+%22deaths%22%0D%0A++%7D%0D%0A%5D&having"
+                                "=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false"
+                                "&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pjson"
+                                "&token=") \
+            as url:
         data = json.loads(url.read().decode())
         features = [i['attributes'] for i in data['features']]
         df_sam = pd.DataFrame(features)
-        df_sam = df_sam.drop(["OBJECTID", "DIENOS"], axis=1)
-        df_sam.columns = ["Confirmed", "Date", "Infected", "Recovered", "Died"]
-        df_sam.Date = pd.to_datetime(df_sam.Date)
+        # df_sam = df_sam.drop(["OBJECTID", "DIENOS"], axis=1)
+        df_sam.columns = ["Confirmed", "Infected", "Recovered", "Died", "Date"]
+        df_sam.Date = pd.to_datetime(df_sam.Date, unit="ms")
         df_sam.index = df_sam.Date
         df_sam.index.name = 'dateIndex'
         df_sam_daily = df_sam.asfreq(freq="D", method="pad")
         # Prepare global data
         df_confirmed = pd.read_csv(
-            "https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+            "https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series"
+            "/time_series_covid19_confirmed_global.csv")
         df_recovered = pd.read_csv(
-            "https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv")
+            "https://github.com/CSSEGISandData/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series"
+            "/time_series_covid19_recovered_global.csv")
         df_fatalities = pd.read_csv(
-            "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
+            "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data"
+            "/csse_covid_19_time_series/time_series_covid19_deaths_global.csv")
         df_confirmed.drop(["Lat", "Long"], axis=1, inplace=True)
         df_confirmed = df_confirmed.melt(id_vars=["Province/State", "Country/Region"],
                                          var_name="Date",
